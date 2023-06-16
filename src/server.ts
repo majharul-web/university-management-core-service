@@ -10,7 +10,9 @@ async function bootstrap() {
     app.listen(config.port, () => {
       console.log(`express app listening on port ${config.port}`);
     });
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 bootstrap();
