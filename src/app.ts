@@ -8,7 +8,7 @@ app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-app.get('/', () => {
+app.get('/', (req: Request, res: Response) => {
   res.send('Hello World!');
 });
 
