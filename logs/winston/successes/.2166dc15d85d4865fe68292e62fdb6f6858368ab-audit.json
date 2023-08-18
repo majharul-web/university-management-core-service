@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "C:\\Users\\Hp\\Desktop\\Next-Level\\Project\\UM-PH\\express-modular-boilerplate\\logs\\winston\\successes\\.2166dc15d85d4865fe68292e62fdb6f6858368ab-audit.json",
+    "files": [
+        {
+            "date": 1692333243861,
+            "name": "C:\\Users\\Hp\\Desktop\\Next-Level\\Project\\UM-PH\\express-modular-boilerplate\\logs\\winston\\successes\\phu-2023-18-08-10-success.log",
+            "hash": "45163aa7897f6e57da5ae3e17b9de19dcbc4b60bbd1af7f2c953538f1c29a3c5"
+        }
+    ],
+    "hashType": "sha256"
+}

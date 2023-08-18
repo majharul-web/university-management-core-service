@@ -1,0 +1,4 @@
+Sun Aug 13 2023 8:10:15 [PH] error: Error connecting to MongoDB:  The `uri` parameter to `openUri()` must be a string, got "undefined". Make sure the first parameter to `mongoose.connect()` or `mongoose.createConnection()` is a string.
+Sun Aug 13 2023 8:13:47 [PH] error: Error connecting to MongoDB:  connect ECONNREFUSED ::1:27017
+Sun Aug 13 2023 8:14:44 [PH] error: Error connecting to MongoDB:  connect ECONNREFUSED ::1:27017
+Sun Aug 13 2023 8:16:41 [PH] error: Error connecting to MongoDB:  database names cannot contain the character '/'
