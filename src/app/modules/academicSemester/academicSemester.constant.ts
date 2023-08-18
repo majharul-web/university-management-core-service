@@ -38,7 +38,8 @@ export const AcademicSemesterTitleCodeMapper: { [key: string]: string } = {
 export const academicSemesterSearchableFields: string[] = [
   'title',
   'code',
-  'year',
+  'startMonth',
+  'endMonth',
 ];
 export const academicSemesterFilterAbleFields: string[] = [
   'searchTerm',
