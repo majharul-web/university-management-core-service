@@ -1,15 +1,15 @@
 {
-    "keep": {
-        "days": true,
-        "amount": 14
-    },
-    "auditLog": "C:\\Users\\Hp\\Desktop\\Next-Level\\Project\\express-modular-boilerplate\\logs\\winston\\successes\\.4d33938d718152a8cb15c62dcf714491e9e060b5-audit.json",
-    "files": [
-        {
-            "date": 1691892615541,
-            "name": "C:\\Users\\Hp\\Desktop\\Next-Level\\Project\\express-modular-boilerplate\\logs\\winston\\successes\\phu-2023-13-08-08-success.log",
-            "hash": "7466a2604b24d9abf6ed4327e08ee39a3d87c0b0f77ecdbbdf43f3eb38518476"
-        }
-    ],
-    "hashType": "sha256"
+  "keep": {
+    "days": true,
+    "amount": 14
+  },
+  "auditLog": "C:\\Users\\Hp\\Desktop\\Next-Level\\Project\\express-modular-boilerplate\\logs\\winston\\successes\\.4d33938d718152a8cb15c62dcf714491e9e060b5-audit.json",
+  "files": [
+    {
+      "date": 1691892615541,
+      "name": "C:\\Users\\Hp\\Desktop\\Next-Level\\Project\\express-modular-boilerplate\\logs\\winston\\successes\\phu-2023-13-08-08-success.log",
+      "hash": "7466a2604b24d9abf6ed4327e08ee39a3d87c0b0f77ecdbbdf43f3eb38518476"
+    }
+  ],
+  "hashType": "sha256"
 }
