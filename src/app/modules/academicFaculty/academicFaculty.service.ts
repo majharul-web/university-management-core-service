@@ -39,8 +39,9 @@ const getAllAcademicFaculties = async (
     });
   }
 
-  const whereConditions: Prisma.AcademicSemesterWhereInput =
-    andConditions.length ? { AND: andConditions } : {};
+  const whereConditions: Prisma.AcademicFacultyWhereInput = andConditions.length
+    ? { AND: andConditions }
+    : {};
 
   const result = await prisma.academicFaculty.findMany({
     where: whereConditions,
