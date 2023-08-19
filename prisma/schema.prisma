@@ -13,7 +13,7 @@ datasource db {
 model AcademicSemester {
   id         String    @id @default(uuid())
   year       Int
-  title      String
+  title      String    @unique
   code       String
   startMonth String
   endMonth   String
