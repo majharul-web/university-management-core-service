@@ -1,7 +1,7 @@
 -- CreateTable
 CREATE TABLE "academic_semesters" (
     "id" TEXT NOT NULL,
-    "year" TEXT NOT NULL,
+    "year" INTEGER NOT NULL,
     "title" TEXT NOT NULL,
     "code" TEXT NOT NULL,
     "startMonth" TEXT NOT NULL,
@@ -42,7 +42,7 @@ CREATE TABLE "students" (
     "middleName" TEXT NOT NULL,
     "profileimage" TEXT NOT NULL,
     "email" TEXT NOT NULL,
-    "contactNo" INTEGER NOT NULL,
+    "contactNo" TEXT NOT NULL,
     "gender" TEXT NOT NULL,
     "bloodGroup" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -63,7 +63,7 @@ CREATE TABLE "faculties" (
     "middleName" TEXT NOT NULL,
     "profileimage" TEXT NOT NULL,
     "email" TEXT NOT NULL,
-    "contactNo" INTEGER NOT NULL,
+    "contactNo" TEXT NOT NULL,
     "gender" TEXT NOT NULL,
     "bloodGroup" TEXT NOT NULL,
     "designation" TEXT NOT NULL,
@@ -74,6 +74,9 @@ CREATE TABLE "faculties" (
 
     CONSTRAINT "faculties_pkey" PRIMARY KEY ("id")
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "academic_semesters_title_key" ON "academic_semesters"("title");
 
 -- AddForeignKey
 ALTER TABLE "academic_departments" ADD CONSTRAINT "academic_departments_academicFacultyId_fkey" FOREIGN KEY ("academicFacultyId") REFERENCES "academic_faculties"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
