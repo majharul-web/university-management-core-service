@@ -31,11 +31,13 @@ const updateAcademicSemesterZodSchema = z
         })
         .optional(),
       year: z
-        .string({
+        .number({
           required_error: 'Year is required ',
         })
         .optional(),
-      code: z.enum([...academicSemesterCodes] as [string, ...string[]]),
+      code: z
+        .enum([...academicSemesterCodes] as [string, ...string[]])
+        .optional(),
       startMonth: z
         .enum([...academicSemesterMonths] as [string, ...string[]], {
           required_error: 'Start month is needed',

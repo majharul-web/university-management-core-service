@@ -10,6 +10,7 @@ const router = express.Router();
 router.patch(
   '/:id',
   auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
+  validateRequest(FacultyValidation.updateFacultyZodSchema),
   FacultyController.updateFaculty
 );
 router.delete(
