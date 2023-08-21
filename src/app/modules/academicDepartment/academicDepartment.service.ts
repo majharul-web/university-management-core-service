@@ -9,14 +9,21 @@ import { paginationHelpers } from '../../../helpers/paginationHelper';
 const createAcademicDepartment = async (
   payload: AcademicDepartment
 ): Promise<AcademicDepartment | null> => {
+  // const result = await prisma.academicDepartment.create({
+  //   data: {
+  //     title: payload.title,
+  //     academicFaculty: {
+  //       connect: {
+  //         id: payload.academicFacultyId,
+  //       },
+  //     },
+  //   },
+  // });
+
   const result = await prisma.academicDepartment.create({
-    data: {
-      title: payload.title,
-      academicFaculty: {
-        connect: {
-          id: payload.academicFacultyId,
-        },
-      },
+    data: payload,
+    include: {
+      academicFaculty: true,
     },
   });
 
