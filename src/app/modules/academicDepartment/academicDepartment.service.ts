@@ -102,8 +102,39 @@ const getSingleAcademicDepartment = async (
   return result;
 };
 
+const updateAcademicDepartment = async (
+  id: string,
+  payload: Partial<AcademicDepartment>
+): Promise<AcademicDepartment | null> => {
+  const result = await prisma.academicDepartment.update({
+    where: {
+      id,
+    },
+    data: payload,
+    include: {
+      academicFaculty: true,
+    },
+  });
+  return result;
+};
+const deleteAcademicDepartment = async (
+  id: string
+): Promise<AcademicDepartment | null> => {
+  const result = await prisma.academicDepartment.delete({
+    where: {
+      id,
+    },
+    include: {
+      academicFaculty: true,
+    },
+  });
+  return result;
+};
+
 export const AcademicDepartmentService = {
   createAcademicDepartment,
   getAllAcademicDepartments,
   getSingleAcademicDepartment,
+  updateAcademicDepartment,
+  deleteAcademicDepartment,
 };
