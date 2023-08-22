@@ -77,7 +77,9 @@ const getAllAcademicDepartments = async (
           },
   });
 
-  const total = await prisma.academicDepartment.count();
+  const total = await prisma.academicDepartment.count({
+    where: whereConditions,
+  });
   return {
     meta: {
       total,
