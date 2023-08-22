@@ -16,14 +16,14 @@ const createBuilding = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const getAllFaculties = catchAsync(async (req: Request, res: Response) => {
+const getAllBuildings = catchAsync(async (req: Request, res: Response) => {
   const filters = pick(req.query, buildingFilterableFields);
   const options = pick(req.query, ['limit', 'page', 'sortBy', 'sortOrder']);
-  const result = await BuildingService.getAllFaculties(filters, options);
+  const result = await BuildingService.getAllBuildings(filters, options);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Faculties fetched successfully',
+    message: 'Buildings fetched successfully',
     meta: result.meta,
     data: result.data,
   });
@@ -64,7 +64,7 @@ const deleteBuilding = catchAsync(async (req: Request, res: Response) => {
 
 export const BuildingController = {
   createBuilding,
-  getAllFaculties,
+  getAllBuildings,
   getSingleBuilding,
   updateBuilding,
   deleteBuilding,

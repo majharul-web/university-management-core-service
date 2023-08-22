@@ -13,7 +13,7 @@ const createBuilding = async (data: Building): Promise<Building> => {
   return result;
 };
 
-const getAllFaculties = async (
+const getAllBuildings = async (
   filterOptions: IBuildingFilterRequest,
   paginationOptions: IPaginationOptions
 ): Promise<IGenericResponse<Building[]>> => {
@@ -101,7 +101,7 @@ const deleteBuilding = async (id: string): Promise<Building | null> => {
 
 export const BuildingService = {
   createBuilding,
-  getAllFaculties,
+  getAllBuildings,
   getSingleBuilding,
   updateBuilding,
   deleteBuilding,
