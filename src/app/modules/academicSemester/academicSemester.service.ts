@@ -58,7 +58,9 @@ const getAllAcademicSemesters = async (
           },
   });
 
-  const total = await prisma.academicSemester.count();
+  const total = await prisma.academicSemester.count({
+    where: whereConditions,
+  });
   return {
     meta: {
       total,

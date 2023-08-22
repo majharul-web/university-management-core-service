@@ -23,11 +23,12 @@ const createStudent = async (data: Student): Promise<Student> => {
 };
 
 const getAllStudents = async (
-  filters: IStudentFilterRequest,
-  options: IPaginationOptions
+  filterOptions: IStudentFilterRequest,
+  paginationOptions: IPaginationOptions
 ): Promise<IGenericResponse<Student[]>> => {
-  const { limit, page, skip } = paginationHelpers.calculatePagination(options);
-  const { searchTerm, ...filterData } = filters;
+  const { searchTerm, ...filtersData } = filterOptions;
+  const { page, limit, skip, sortBy, sortOrder } =
+    paginationHelpers.calculatePagination(paginationOptions);
 
   const andConditions = [];
 
@@ -42,19 +43,19 @@ const getAllStudents = async (
     });
   }
 
-  if (Object.keys(filterData).length > 0) {
+  if (Object.keys(filtersData).length > 0) {
     andConditions.push({
-      AND: Object.keys(filterData).map(key => {
+      AND: Object.keys(filtersData).map(key => {
         if (studentRelationalFields.includes(key)) {
           return {
             [studentRelationalFieldsMapper[key]]: {
-              id: (filterData as any)[key],
+              id: (filtersData as any)[key],
             },
           };
         } else {
           return {
             [key]: {
-              equals: (filterData as any)[key],
+              equals: (filtersData as any)[key],
             },
           };
         }
@@ -75,8 +76,10 @@ const getAllStudents = async (
     skip,
     take: limit,
     orderBy:
-      options.sortBy && options.sortOrder
-        ? { [options.sortBy]: options.sortOrder }
+      sortBy && sortOrder
+        ? {
+            [sortBy]: sortOrder,
+          }
         : {
             createdAt: 'desc',
           },
