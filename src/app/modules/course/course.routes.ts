@@ -24,7 +24,7 @@ router.get('/:id', CourseController.getSingleCourse);
 
 router.post(
   '/create-course',
-  auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
+  // auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
   validateRequest(CourseValidation.createCourseZodSchema),
   CourseController.createCourse
 );
