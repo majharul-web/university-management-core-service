@@ -99,6 +99,16 @@
             "date": 1692792060658,
             "name": "C:\\Users\\Hp\\Desktop\\Next-Level\\Project\\UM-PH\\university-management-core-service\\logs\\winston\\errors\\phu-2023-23-08-18-error.log",
             "hash": "0f246f6a056012af2f42a6d46282a361e6f49b6504d186b116476e558d2cc8b3"
+        },
+        {
+            "date": 1692961630456,
+            "name": "C:\\Users\\Hp\\Desktop\\Next-Level\\Project\\UM-PH\\university-management-core-service\\logs\\winston\\errors\\phu-2023-25-08-17-error.log",
+            "hash": "1b5c8038635a80866d53652e7617b3cf4303eb9860051506dafab8334f69a825"
+        },
+        {
+            "date": 1692965176515,
+            "name": "C:\\Users\\Hp\\Desktop\\Next-Level\\Project\\UM-PH\\university-management-core-service\\logs\\winston\\errors\\phu-2023-25-08-18-error.log",
+            "hash": "359db48f28f33cc2dfa47e0b030a9b6567fb336faeffee00365bae351e1d0f3f"
         }
     ],
     "hashType": "sha256"
