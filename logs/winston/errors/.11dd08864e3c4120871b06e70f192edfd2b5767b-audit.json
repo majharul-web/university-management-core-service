@@ -109,6 +109,31 @@
             "date": 1692965176515,
             "name": "C:\\Users\\Hp\\Desktop\\Next-Level\\Project\\UM-PH\\university-management-core-service\\logs\\winston\\errors\\phu-2023-25-08-18-error.log",
             "hash": "359db48f28f33cc2dfa47e0b030a9b6567fb336faeffee00365bae351e1d0f3f"
+        },
+        {
+            "date": 1692978629926,
+            "name": "C:\\Users\\Hp\\Desktop\\Next-Level\\Project\\UM-PH\\university-management-core-service\\logs\\winston\\errors\\phu-2023-25-08-21-error.log",
+            "hash": "09201d18b598682ebcae74ea82dffe5f3688e1026388c269f4ca7901cdfa8994"
+        },
+        {
+            "date": 1692979316475,
+            "name": "C:\\Users\\Hp\\Desktop\\Next-Level\\Project\\UM-PH\\university-management-core-service\\logs\\winston\\errors\\phu-2023-25-08-22-error.log",
+            "hash": "690bc1fda7f6841359aa626c93a4890717ee1713607f422ac790379aa2a4bc4a"
+        },
+        {
+            "date": 1693026148329,
+            "name": "C:\\Users\\Hp\\Desktop\\Next-Level\\Project\\UM-PH\\university-management-core-service\\logs\\winston\\errors\\phu-2023-26-08-11-error.log",
+            "hash": "89a4f42551f98776ee8a6b14a46eed0cb5d00fa789ec4e5b033339bcb92bfbb9"
+        },
+        {
+            "date": 1693029891666,
+            "name": "C:\\Users\\Hp\\Desktop\\Next-Level\\Project\\UM-PH\\university-management-core-service\\logs\\winston\\errors\\phu-2023-26-08-12-error.log",
+            "hash": "975233b1f31decf2b040a60b3215380d600b925cc3b3953c89657ad496cead0a"
+        },
+        {
+            "date": 1693033275930,
+            "name": "C:\\Users\\Hp\\Desktop\\Next-Level\\Project\\UM-PH\\university-management-core-service\\logs\\winston\\errors\\phu-2023-26-08-13-error.log",
+            "hash": "3d765e17ee857a21c5aae606ad685b5e6b03982ca5fb32b01c01af124bc7607b"
         }
     ],
     "hashType": "sha256"
