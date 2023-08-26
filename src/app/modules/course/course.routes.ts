@@ -9,7 +9,7 @@ const router = express.Router();
 
 router.patch(
   '/:id',
-  // auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
+  auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
   validateRequest(CourseValidation.updateCourseZodSchema),
   CourseController.updateCourse
 );
@@ -24,22 +24,22 @@ router.get('/:id', CourseController.getSingleCourse);
 
 router.post(
   '/create-course',
-  // auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
+  auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
   validateRequest(CourseValidation.createCourseZodSchema),
   CourseController.createCourse
 );
 
 router.post(
   '/:id/assign-faculties',
-  // validateRequest(CourseValidation.assignOrRemoveFaculties),
-  // auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
+  validateRequest(CourseValidation.assignOrRemoveFaculties),
+  auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
   CourseController.assignFaculties
 );
 
 router.delete(
   '/:id/remove-faculties',
-  // auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
-  // validateRequest(CourseValidation.assignOrRemoveFaculties),
+  auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
+  validateRequest(CourseValidation.assignOrRemoveFaculties),
   CourseController.removeFaculties
 );
 export const CourseRoutes = router;
