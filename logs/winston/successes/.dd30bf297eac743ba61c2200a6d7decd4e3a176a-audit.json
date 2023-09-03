@@ -144,6 +144,11 @@
             "date": 1693733543802,
             "name": "C:\\Users\\Hp\\Desktop\\Next-Level\\Project\\UM-PH\\university-management-core-service\\logs\\winston\\successes\\phu-2023-03-09-15-success.log",
             "hash": "23f3ff3ba2f5a4195836f0792f5659186245978feee515ebd01885a31f451708"
+        },
+        {
+            "date": 1693735269315,
+            "name": "C:\\Users\\Hp\\Desktop\\Next-Level\\Project\\UM-PH\\university-management-core-service\\logs\\winston\\successes\\phu-2023-03-09-16-success.log",
+            "hash": "01ac9e70c0b1ce23d7f799cf3c2657b18da053e13393b38412fd00e815bbe19d"
         }
     ],
     "hashType": "sha256"
