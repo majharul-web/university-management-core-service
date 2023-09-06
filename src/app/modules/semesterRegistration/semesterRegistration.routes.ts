@@ -70,4 +70,4 @@ router.post(
   SemesterRegistrationController.startNewSemester
 );
 
-export const semesterRegistrationRoutes = router;
+export const SemesterRegistrationRoutes = router;
