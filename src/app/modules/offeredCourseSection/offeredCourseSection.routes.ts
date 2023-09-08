@@ -29,7 +29,7 @@ router.get(
 
 router.post(
   '/create-section',
-  auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
+  // auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
   validateRequest(
     OfferedCourseSectionValidation.createOfferedCourseSectionZodSchema
   ),
