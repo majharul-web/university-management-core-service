@@ -13,6 +13,12 @@ router.get(
   SemesterRegistrationController.getMyRegistration
 );
 
+router.get(
+  '/get-my-semsester-courses',
+  auth(ENUM_USER_ROLE.STUDENT),
+  SemesterRegistrationController.getMySemesterRegCourses
+);
+
 router.post(
   '/start-registration',
   auth(ENUM_USER_ROLE.STUDENT),
@@ -28,14 +34,14 @@ router.get(
 router.post(
   '/',
   validateRequest(SemesterRegistrationValidation.createSemesterRegistration),
-  // auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
+  auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
   SemesterRegistrationController.createSemesterRegistration
 );
 
 router.patch(
   '/:id',
   validateRequest(SemesterRegistrationValidation.updateSemesterRegistration),
-  // auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
+  auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
   SemesterRegistrationController.updateSemesterRegistration
 );
 
@@ -66,7 +72,7 @@ router.post(
 
 router.post(
   '/:id/start-new-semester',
-  // auth(ENUM_USER_ROLE.ADMIN),
+  auth(ENUM_USER_ROLE.ADMIN),
   SemesterRegistrationController.startNewSemester
 );
 
