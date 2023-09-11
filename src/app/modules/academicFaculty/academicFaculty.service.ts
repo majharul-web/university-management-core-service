@@ -1,5 +1,5 @@
 import { IPaginationOptions } from '../../../interfaces/pagination';
-import { IAcademicFacultyFilters } from './academicFaculty.interface';
+import { IAcademicFacultyFilterRequest } from './academicFaculty.interface';
 import { AcademicFaculty, Prisma } from '@prisma/client';
 import { academicFacultySearchableFields } from './academicFaculty.constant';
 import { IGenericResponse } from '../../../interfaces/common';
@@ -14,10 +14,10 @@ const createAcademicFaculty = async (
 };
 
 const getAllAcademicFaculties = async (
-  filterOptions: IAcademicFacultyFilters,
+  filterOptions: IAcademicFacultyFilterRequest,
   paginationOptions: IPaginationOptions
 ): Promise<IGenericResponse<AcademicFaculty[] | null>> => {
-  const { searchTerm, ...filtersData } = filterOptions;
+  const { searchTerm, ...filterData } = filterOptions;
 
   const { page, limit, skip, sortBy, sortOrder } =
     paginationHelpers.calculatePagination(paginationOptions);
@@ -26,15 +26,20 @@ const getAllAcademicFaculties = async (
   if (searchTerm) {
     andConditions.push({
       OR: academicFacultySearchableFields.map(field => ({
-        [field]: { contains: searchTerm, mode: 'insensitive' },
+        [field]: {
+          contains: searchTerm,
+          mode: 'insensitive',
+        },
       })),
     });
   }
 
-  if (Object.keys(filtersData).length) {
+  if (Object.keys(filterData).length > 0) {
     andConditions.push({
-      AND: Object.entries(filtersData).map(([field, value]) => ({
-        [field]: value,
+      AND: Object.keys(filterData).map(key => ({
+        [key]: {
+          equals: (filterData as any)[key],
+        },
       })),
     });
   }

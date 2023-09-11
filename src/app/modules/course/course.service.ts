@@ -72,7 +72,7 @@ const getAllCourses = async (
   filterOptions: ICourseFilterRequest,
   paginationOptions: IPaginationOptions
 ): Promise<IGenericResponse<Course[]>> => {
-  const { searchTerm, ...filtersData } = filterOptions;
+  const { searchTerm, ...filterData } = filterOptions;
 
   const { page, limit, skip, sortBy, sortOrder } =
     paginationHelpers.calculatePagination(paginationOptions);
@@ -81,15 +81,20 @@ const getAllCourses = async (
   if (searchTerm) {
     andConditions.push({
       OR: courseSearchableFields.map(field => ({
-        [field]: { contains: searchTerm, mode: 'insensitive' },
+        [field]: {
+          contains: searchTerm,
+          mode: 'insensitive',
+        },
       })),
     });
   }
 
-  if (Object.keys(filtersData).length) {
+  if (Object.keys(filterData).length > 0) {
     andConditions.push({
-      AND: Object.entries(filtersData).map(([field, value]) => ({
-        [field]: value,
+      AND: Object.keys(filterData).map(key => ({
+        [key]: {
+          equals: (filterData as any)[key],
+        },
       })),
     });
   }

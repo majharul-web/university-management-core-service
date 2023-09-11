@@ -1,7 +1,11 @@
 import { IPaginationOptions } from '../../../interfaces/pagination';
-import { IAcademicDepartmentFilters } from './academicDepartment.interface';
+import { IAcademicDepartmentFilterRequest } from './academicDepartment.interface';
 import { AcademicDepartment, Prisma } from '@prisma/client';
-import { academicDepartmentSearchableFields } from './academicDepartment.constant';
+import {
+  academicDepartmentRelationalFields,
+  academicDepartmentRelationalFieldsMapper,
+  academicDepartmentSearchableFields,
+} from './academicDepartment.constant';
 import { IGenericResponse } from '../../../interfaces/common';
 import prisma from '../../../shared/prisma';
 import { paginationHelpers } from '../../../helpers/paginationHelper';
@@ -31,10 +35,10 @@ const createAcademicDepartment = async (
 };
 
 const getAllAcademicDepartments = async (
-  filterOptions: IAcademicDepartmentFilters,
+  filterOptions: IAcademicDepartmentFilterRequest,
   paginationOptions: IPaginationOptions
 ): Promise<IGenericResponse<AcademicDepartment[] | null>> => {
-  const { searchTerm, ...filtersData } = filterOptions;
+  const { searchTerm, ...filterData } = filterOptions;
 
   const { page, limit, skip, sortBy, sortOrder } =
     paginationHelpers.calculatePagination(paginationOptions);
@@ -43,16 +47,31 @@ const getAllAcademicDepartments = async (
   if (searchTerm) {
     andConditions.push({
       OR: academicDepartmentSearchableFields.map(field => ({
-        [field]: { contains: searchTerm, mode: 'insensitive' },
+        [field]: {
+          contains: searchTerm,
+          mode: 'insensitive',
+        },
       })),
     });
   }
 
-  if (Object.keys(filtersData).length) {
+  if (Object.keys(filterData).length > 0) {
     andConditions.push({
-      AND: Object.entries(filtersData).map(([field, value]) => ({
-        [field]: value,
-      })),
+      AND: Object.keys(filterData).map(key => {
+        if (academicDepartmentRelationalFields.includes(key)) {
+          return {
+            [academicDepartmentRelationalFieldsMapper[key]]: {
+              id: (filterData as any)[key],
+            },
+          };
+        } else {
+          return {
+            [key]: {
+              equals: (filterData as any)[key],
+            },
+          };
+        }
+      }),
     });
   }
 

@@ -1,6 +1,16 @@
-export const academicDepartmentSearchableFields = ['title'];
-
-export const academicDepartmentFilterableFields = [
+export const academicDepartmentFilterableFields: string[] = [
   'searchTerm',
-  ...academicDepartmentSearchableFields,
+  'id',
+  'academicFacultyId',
 ];
+
+export const academicDepartmentSearchableFields: string[] = ['title'];
+
+export const academicDepartmentRelationalFields: string[] = [
+  'academicFacultyId',
+];
+export const academicDepartmentRelationalFieldsMapper: {
+  [key: string]: string;
+} = {
+  academicFacultyId: 'academicFaculty',
+};
