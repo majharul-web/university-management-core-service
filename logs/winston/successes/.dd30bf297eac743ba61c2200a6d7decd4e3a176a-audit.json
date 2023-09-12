@@ -6,16 +6,6 @@
     "auditLog": "C:\\Users\\Hp\\Desktop\\Next-Level\\Project\\UM-PH\\university-management-core-service\\logs\\winston\\successes\\.dd30bf297eac743ba61c2200a6d7decd4e3a176a-audit.json",
     "files": [
         {
-            "date": 1693283335228,
-            "name": "C:\\Users\\Hp\\Desktop\\Next-Level\\Project\\UM-PH\\university-management-core-service\\logs\\winston\\successes\\phu-2023-29-08-10-success.log",
-            "hash": "895df3dbb3480e1ac4c687649817cbd293f1ff6315c7c462f3474bca68092ab3"
-        },
-        {
-            "date": 1693285468443,
-            "name": "C:\\Users\\Hp\\Desktop\\Next-Level\\Project\\UM-PH\\university-management-core-service\\logs\\winston\\successes\\phu-2023-29-08-11-success.log",
-            "hash": "eff6e3b3e8d2e2cf6d7c2de0aa5f9a186edc405158c74abeb47a66aa801fd712"
-        },
-        {
             "date": 1693295310676,
             "name": "C:\\Users\\Hp\\Desktop\\Next-Level\\Project\\UM-PH\\university-management-core-service\\logs\\winston\\successes\\phu-2023-29-08-13-success.log",
             "hash": "99e9d29a3ea0eb17576a5802112c807bcc966252c844b4d9be53d1d61c6bc438"
@@ -154,6 +144,11 @@
             "date": 1694439965935,
             "name": "C:\\Users\\Hp\\Desktop\\Next-Level\\Project\\UM-PH\\university-management-core-service\\logs\\winston\\successes\\phu-2023-11-09-19-success.log",
             "hash": "bea020423a6840560a6de29853e676d1e52cacfc370899b1765037def651cc69"
+        },
+        {
+            "date": 1694499310754,
+            "name": "C:\\Users\\Hp\\Desktop\\Next-Level\\Project\\UM-PH\\university-management-core-service\\logs\\winston\\successes\\phu-2023-12-09-12-success.log",
+            "hash": "05feb2fad3f90402e8cf6e6aa10e19a615ab900dcadff671afca3bcc359b9505"
         }
     ],
     "hashType": "sha256"
