@@ -13,7 +13,7 @@ import {
   IFacultyMyCourseStudentsRequest,
 } from './faculty.interface';
 
-const createFaculty = async (data: Faculty): Promise<Faculty> => {
+const insertIntoDB = async (data: Faculty): Promise<Faculty> => {
   const result = await prisma.faculty.create({
     data,
     include: {
@@ -24,13 +24,12 @@ const createFaculty = async (data: Faculty): Promise<Faculty> => {
   return result;
 };
 
-const getAllFaculties = async (
-  filterOptions: IFacultyFilterRequest,
-  paginationOptions: IPaginationOptions
+const getAllFromDB = async (
+  filters: IFacultyFilterRequest,
+  options: IPaginationOptions
 ): Promise<IGenericResponse<Faculty[]>> => {
-  const { searchTerm, ...filtersData } = filterOptions;
-  const { page, limit, skip, sortBy, sortOrder } =
-    paginationHelpers.calculatePagination(paginationOptions);
+  const { limit, page, skip } = paginationHelpers.calculatePagination(options);
+  const { searchTerm, ...filterData } = filters;
 
   const andConditions = [];
 
@@ -45,19 +44,19 @@ const getAllFaculties = async (
     });
   }
 
-  if (Object.keys(filtersData).length > 0) {
+  if (Object.keys(filterData).length > 0) {
     andConditions.push({
-      AND: Object.keys(filtersData).map(key => {
+      AND: Object.keys(filterData).map(key => {
         if (facultyRelationalFields.includes(key)) {
           return {
             [facultyRelationalFieldsMapper[key]]: {
-              id: (filtersData as any)[key],
+              id: (filterData as any)[key],
             },
           };
         } else {
           return {
             [key]: {
-              equals: (filtersData as any)[key],
+              equals: (filterData as any)[key],
             },
           };
         }
@@ -77,10 +76,8 @@ const getAllFaculties = async (
     skip,
     take: limit,
     orderBy:
-      sortBy && sortOrder
-        ? {
-            [sortBy]: sortOrder,
-          }
+      options.sortBy && options.sortOrder
+        ? { [options.sortBy]: options.sortOrder }
         : {
             createdAt: 'desc',
           },
@@ -99,7 +96,7 @@ const getAllFaculties = async (
   };
 };
 
-const getSingleFaculty = async (id: string): Promise<Faculty | null> => {
+const getByIdFromDB = async (id: string): Promise<Faculty | null> => {
   const result = await prisma.faculty.findUnique({
     where: {
       id,
@@ -112,30 +109,31 @@ const getSingleFaculty = async (id: string): Promise<Faculty | null> => {
   return result;
 };
 
-const updateFaculty = async (
+const updateOneInDB = async (
   id: string,
   payload: Partial<Faculty>
-): Promise<Faculty | null> => {
+): Promise<Faculty> => {
   const result = await prisma.faculty.update({
     where: {
       id,
     },
     data: payload,
     include: {
-      academicDepartment: true,
       academicFaculty: true,
+      academicDepartment: true,
     },
   });
   return result;
 };
-const deleteFaculty = async (id: string): Promise<Faculty | null> => {
+
+const deleteByIdFromDB = async (id: string): Promise<Faculty> => {
   const result = await prisma.faculty.delete({
     where: {
       id,
     },
     include: {
-      academicDepartment: true,
       academicFaculty: true,
+      academicDepartment: true,
     },
   });
   return result;
@@ -244,13 +242,15 @@ const myCourses = async (
     },
   });
 
-  const courseAndSchedule = offeredCourseSections.reduce(
+  const couseAndSchedule = offeredCourseSections.reduce(
     (acc: any, obj: any) => {
+      //console.log(obj)
+
       const course = obj.offeredCourse.course;
       const classSchedules = obj.offeredCourseClassSchedules;
 
       const existingCourse = acc.find(
-        (item: any) => item.course?.id === course?.id
+        (item: any) => item.couse?.id === course?.id
       );
       if (existingCourse) {
         existingCourse.sections.push({
@@ -272,7 +272,7 @@ const myCourses = async (
     },
     []
   );
-  return courseAndSchedule;
+  return couseAndSchedule;
 };
 
 const getMyCourseStudents = async (
@@ -355,11 +355,11 @@ const getMyCourseStudents = async (
 };
 
 export const FacultyService = {
-  createFaculty,
-  getAllFaculties,
-  getSingleFaculty,
-  updateFaculty,
-  deleteFaculty,
+  insertIntoDB,
+  getAllFromDB,
+  getByIdFromDB,
+  updateOneInDB,
+  deleteByIdFromDB,
   assignCourses,
   removeCourses,
   myCourses,

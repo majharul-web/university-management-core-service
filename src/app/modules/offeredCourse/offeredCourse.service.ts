@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-
 import { OfferedCourse, Prisma } from '@prisma/client';
 import { paginationHelpers } from '../../../helpers/paginationHelper';
 import { IGenericResponse } from '../../../interfaces/common';
@@ -16,7 +14,7 @@ import {
   IOfferedCourseFilterRequest,
 } from './offeredCourse.interface';
 
-const createOfferedCourse = async (
+const insertIntoDB = async (
   data: ICreateOfferedCourse
 ): Promise<OfferedCourse[]> => {
   const { academicDepartmentId, semesterRegistrationId, courseIds } = data;
@@ -52,7 +50,7 @@ const createOfferedCourse = async (
   return result;
 };
 
-const getAllOfferedCourse = async (
+const getAllFromDB = async (
   filters: IOfferedCourseFilterRequest,
   options: IPaginationOptions
 ): Promise<IGenericResponse<OfferedCourse[]>> => {
@@ -125,9 +123,7 @@ const getAllOfferedCourse = async (
   };
 };
 
-const getSingleOfferedCourse = async (
-  id: string
-): Promise<OfferedCourse | null> => {
+const getByIdFromDB = async (id: string): Promise<OfferedCourse | null> => {
   const result = await prisma.offeredCourse.findUnique({
     where: {
       id,
@@ -141,7 +137,7 @@ const getSingleOfferedCourse = async (
   return result;
 };
 
-const updateOfferedCourse = async (
+const updateOneInDB = async (
   id: string,
   payload: Partial<OfferedCourse>
 ): Promise<OfferedCourse> => {
@@ -159,7 +155,7 @@ const updateOfferedCourse = async (
   return result;
 };
 
-const deleteOfferedCourse = async (id: string): Promise<OfferedCourse> => {
+const deleteByIdFromDB = async (id: string): Promise<OfferedCourse> => {
   const result = await prisma.offeredCourse.delete({
     where: {
       id,
@@ -173,10 +169,10 @@ const deleteOfferedCourse = async (id: string): Promise<OfferedCourse> => {
   return result;
 };
 
-export const OfferedCourseService = {
-  createOfferedCourse,
-  getAllOfferedCourse,
-  getSingleOfferedCourse,
-  updateOfferedCourse,
-  deleteOfferedCourse,
+export const offeredCourseService = {
+  insertIntoDB,
+  getAllFromDB,
+  getByIdFromDB,
+  updateOneInDB,
+  deleteByIdFromDB,
 };

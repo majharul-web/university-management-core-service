@@ -14,22 +14,22 @@ import { paginationHelpers } from '../../../helpers/paginationHelper';
 import { IGenericResponse } from '../../../interfaces/common';
 import { IPaginationOptions } from '../../../interfaces/pagination';
 import prisma from '../../../shared/prisma';
+import { asyncForEach } from '../../../shared/utils';
+import { StudentEnrolledCourseMarkService } from '../studentEnrolledCourseMark/studentEnrolledCourseMark.service';
+import { StudentSemesterPaymentService } from '../studentSemesterPayment/studentSemesterPayment.service';
+import { studentSemesterRegistrationCourseService } from '../studentSemesterRegistrationCourse/studentSemesterRegistrationCourse.service';
 import {
   semesterRegistrationRelationalFields,
   semesterRegistrationRelationalFieldsMapper,
   semesterRegistrationSearchableFields,
-} from './semesterRegistration.constant';
+} from './semesterRegistration.constants';
 import {
   IEnrollCoursePayload,
   ISemesterRegistrationFilterRequest,
 } from './semesterRegistration.interface';
-import { studentSemesterRegistrationCourseService } from '../studentSemesterRegistrationCourse/studentSemesterRegistrationCourse.service';
-import { asyncForEach } from '../../../shared/utils';
-import { StudentSemesterPaymentService } from '../studentSemesterPayment/studentSemesterPayment.service';
-import { StudentEnrolledCourseMarkService } from '../studentEnrolledCourseMark/studentEnrolledCourseMark.service';
 import { SemesterRegistrationUtils } from './semesterRegistration.utils';
 
-const createSemesterRegistration = async (
+const insertIntoDB = async (
   data: SemesterRegistration
 ): Promise<SemesterRegistration> => {
   const isAnySemesterRegUpcomingOrOngoing =
@@ -60,7 +60,7 @@ const createSemesterRegistration = async (
   return result;
 };
 
-const getAllSemesterRegistration = async (
+const getAllFromDB = async (
   filters: ISemesterRegistrationFilterRequest,
   options: IPaginationOptions
 ): Promise<IGenericResponse<SemesterRegistration[]>> => {
@@ -131,7 +131,7 @@ const getAllSemesterRegistration = async (
   };
 };
 
-const getSingleSemesterRegistration = async (
+const getByIdFromDB = async (
   id: string
 ): Promise<SemesterRegistration | null> => {
   const result = await prisma.semesterRegistration.findUnique({
@@ -145,10 +145,13 @@ const getSingleSemesterRegistration = async (
   return result;
 };
 
-const updateSemesterRegistration = async (
+// UPCOMING > ONGOING  > ENDED
+
+const updateOneInDB = async (
   id: string,
   payload: Partial<SemesterRegistration>
 ): Promise<SemesterRegistration> => {
+  console.log(payload.status);
   const isExist = await prisma.semesterRegistration.findUnique({
     where: {
       id,
@@ -194,9 +197,7 @@ const updateSemesterRegistration = async (
   return result;
 };
 
-const deleteSemesterRegistration = async (
-  id: string
-): Promise<SemesterRegistration> => {
+const deleteByIdFromDB = async (id: string): Promise<SemesterRegistration> => {
   const result = await prisma.semesterRegistration.delete({
     where: {
       id,
@@ -470,7 +471,6 @@ const startNewSemester = async (
             }
           );
         }
-
         const studentSemesterRegistrationCourses =
           await prismaTransactionClient.studentSemesterRegistrationCourse.findMany(
             {
@@ -491,7 +491,6 @@ const startNewSemester = async (
               },
             }
           );
-
         await asyncForEach(
           studentSemesterRegistrationCourses,
           async (
@@ -544,12 +543,14 @@ const startNewSemester = async (
   };
 };
 
-const getMySemesterRegCourses = async (authUserId: string) => {
+const getMySemesterRegCouses = async (authUserId: string) => {
   const student = await prisma.student.findFirst({
     where: {
       studentId: authUserId,
     },
   });
+
+  //console.log(student);
 
   const semesterRegistration = await prisma.semesterRegistration.findFirst({
     where: {
@@ -564,6 +565,7 @@ const getMySemesterRegCourses = async (authUserId: string) => {
       academicSemester: true,
     },
   });
+  console.log(semesterRegistration);
 
   if (!semesterRegistration) {
     throw new ApiError(
@@ -599,6 +601,7 @@ const getMySemesterRegCourses = async (authUserId: string) => {
         offeredCourseSection: true,
       },
     });
+  console.log(studentCurrentSemesterTakenCourse);
 
   const offeredCourse = await prisma.offeredCourse.findMany({
     where: {
@@ -635,6 +638,7 @@ const getMySemesterRegCourses = async (authUserId: string) => {
     },
   });
 
+  //console.log("Offered course: ", offeredCourse)
   const availableCourses = SemesterRegistrationUtils.getAvailableCourses(
     offeredCourse,
     studentCompletedCourse,
@@ -644,16 +648,16 @@ const getMySemesterRegCourses = async (authUserId: string) => {
 };
 
 export const SemesterRegistrationService = {
-  createSemesterRegistration,
-  getAllSemesterRegistration,
-  getSingleSemesterRegistration,
-  deleteSemesterRegistration,
-  updateSemesterRegistration,
+  insertIntoDB,
+  getAllFromDB,
+  getByIdFromDB,
+  updateOneInDB,
+  deleteByIdFromDB,
   startMyRegistration,
   enrollIntoCourse,
   withdrewFromCourse,
   confirmMyRegistration,
   getMyRegistration,
   startNewSemester,
-  getMySemesterRegCourses,
+  getMySemesterRegCouses,
 };

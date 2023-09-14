@@ -1,10 +1,12 @@
-/* eslint-disable no-unused-vars */
-
 import { OfferedCourseSection, Prisma } from '@prisma/client';
+import httpStatus from 'http-status';
+import ApiError from '../../../errors/ApiError';
 import { paginationHelpers } from '../../../helpers/paginationHelper';
 import { IGenericResponse } from '../../../interfaces/common';
 import { IPaginationOptions } from '../../../interfaces/pagination';
 import prisma from '../../../shared/prisma';
+import { asyncForEach } from '../../../shared/utils';
+import { OfferedCourseClassScheduleUtils } from '../offeredCourseClassSchedule/offeredCourseClassSchedule.utils';
 import {
   offeredCourseSectionRelationalFields,
   offeredCourseSectionRelationalFieldsMapper,
@@ -15,12 +17,8 @@ import {
   IOfferedCourseSectionCreate,
   IOfferedCourseSectionFilterRequest,
 } from './offeredCourseSection.interface';
-import ApiError from '../../../errors/ApiError';
-import httpStatus from 'http-status';
-import { asyncForEach } from '../../../shared/utils';
-import { OfferedCourseClassScheduleUtils } from '../offeredCourseClassSchedule/offeredCourseClassSchedule.utils';
 
-const createOfferedCourseSection = async (
+const insertIntoDB = async (
   payload: IOfferedCourseSectionCreate
 ): Promise<OfferedCourseSection | null> => {
   const { classSchedules, ...data } = payload;
@@ -110,7 +108,7 @@ const createOfferedCourseSection = async (
   return result;
 };
 
-const getAllOfferedCourseSection = async (
+const getAllFromDB = async (
   filters: IOfferedCourseSectionFilterRequest,
   options: IPaginationOptions
 ): Promise<IGenericResponse<OfferedCourseSection[]>> => {
@@ -185,7 +183,7 @@ const getAllOfferedCourseSection = async (
   };
 };
 
-const getSingleOfferedCourseSection = async (
+const getByIdFromDB = async (
   id: string
 ): Promise<OfferedCourseSection | null> => {
   const result = await prisma.offeredCourseSection.findUnique({
@@ -203,7 +201,7 @@ const getSingleOfferedCourseSection = async (
   return result;
 };
 
-const updateOfferedCourseSection = async (
+const updateOneInDB = async (
   id: string,
   payload: Partial<OfferedCourseSection>
 ): Promise<OfferedCourseSection> => {
@@ -224,9 +222,7 @@ const updateOfferedCourseSection = async (
   return result;
 };
 
-const deleteOfferedCourseSection = async (
-  id: string
-): Promise<OfferedCourseSection> => {
+const deleteByIdFromDB = async (id: string): Promise<OfferedCourseSection> => {
   const result = await prisma.offeredCourseSection.delete({
     where: {
       id,
@@ -243,9 +239,9 @@ const deleteOfferedCourseSection = async (
 };
 
 export const OfferedCourseSectionService = {
-  createOfferedCourseSection,
-  getAllOfferedCourseSection,
-  getSingleOfferedCourseSection,
-  updateOfferedCourseSection,
-  deleteOfferedCourseSection,
+  insertIntoDB,
+  getAllFromDB,
+  getByIdFromDB,
+  updateOneInDB,
+  deleteByIdFromDB,
 };

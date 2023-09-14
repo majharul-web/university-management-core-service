@@ -1,9 +1,9 @@
 import { z } from 'zod';
 
-const createRoomZodSchema = z.object({
+const create = z.object({
   body: z.object({
     roomNumber: z.string({
-      required_error: 'Room Number is required',
+      required_error: 'Room number is required',
     }),
     floor: z.string({
       required_error: 'Floor is required',
@@ -14,7 +14,7 @@ const createRoomZodSchema = z.object({
   }),
 });
 
-const updateRoomZodSchema = z.object({
+const update = z.object({
   body: z.object({
     roomNumber: z.string().optional(),
     floor: z.string().optional(),
@@ -23,6 +23,6 @@ const updateRoomZodSchema = z.object({
 });
 
 export const RoomValidation = {
-  createRoomZodSchema,
-  updateRoomZodSchema,
+  create,
+  update,
 };

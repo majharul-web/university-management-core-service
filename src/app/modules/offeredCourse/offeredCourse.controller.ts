@@ -1,14 +1,13 @@
 import { Request, Response } from 'express';
 import httpStatus from 'http-status';
 import catchAsync from '../../../shared/catchAsync';
-
-import sendResponse from '../../../shared/sendResponse';
-import { OfferedCourseService } from './offeredCourse.service';
-import { offeredCourseFilterableFields } from './offeredCourse.constants';
 import pick from '../../../shared/pick';
+import sendResponse from '../../../shared/sendResponse';
+import { offeredCourseFilterableFields } from './offeredCourse.constants';
+import { offeredCourseService } from './offeredCourse.service';
 
-const createOfferedCourse = catchAsync(async (req: Request, res: Response) => {
-  const result = await OfferedCourseService.createOfferedCourse(req.body);
+const insertIntoDB = catchAsync(async (req: Request, res: Response) => {
+  const result = await offeredCourseService.insertIntoDB(req.body);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -17,13 +16,10 @@ const createOfferedCourse = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const getAllOfferedCourse = catchAsync(async (req: Request, res: Response) => {
+const getAllFromDB = catchAsync(async (req: Request, res: Response) => {
   const filters = pick(req.query, offeredCourseFilterableFields);
   const options = pick(req.query, ['limit', 'page', 'sortBy', 'sortOrder']);
-  const result = await OfferedCourseService.getAllOfferedCourse(
-    filters,
-    options
-  );
+  const result = await offeredCourseService.getAllFromDB(filters, options);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -33,22 +29,20 @@ const getAllOfferedCourse = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const getSingleOfferedCourse = catchAsync(
-  async (req: Request, res: Response) => {
-    const { id } = req.params;
-    const result = await OfferedCourseService.getSingleOfferedCourse(id);
-    sendResponse(res, {
-      statusCode: httpStatus.OK,
-      success: true,
-      message: 'OfferedCourse fetched successfully',
-      data: result,
-    });
-  }
-);
-
-const updateOfferedCourse = catchAsync(async (req: Request, res: Response) => {
+const getByIdFromDB = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
-  const result = await OfferedCourseService.updateOfferedCourse(id, req.body);
+  const result = await offeredCourseService.getByIdFromDB(id);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'OfferedCourse fetched successfully',
+    data: result,
+  });
+});
+
+const updateOneInDB = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const result = await offeredCourseService.updateOneInDB(id, req.body);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -57,9 +51,9 @@ const updateOfferedCourse = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const deleteOfferedCourse = catchAsync(async (req: Request, res: Response) => {
+const deleteByIdFromDB = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
-  const result = await OfferedCourseService.deleteOfferedCourse(id);
+  const result = await offeredCourseService.deleteByIdFromDB(id);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -69,9 +63,9 @@ const deleteOfferedCourse = catchAsync(async (req: Request, res: Response) => {
 });
 
 export const OfferedCourseController = {
-  createOfferedCourse,
-  getAllOfferedCourse,
-  getSingleOfferedCourse,
-  updateOfferedCourse,
-  deleteOfferedCourse,
+  insertIntoDB,
+  getAllFromDB,
+  getByIdFromDB,
+  updateOneInDB,
+  deleteByIdFromDB,
 };

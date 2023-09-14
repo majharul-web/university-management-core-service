@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-const createStudentZodSchema = z.object({
+const create = z.object({
   body: z.object({
     studentId: z.string({
       required_error: 'Student id is required',
@@ -41,7 +41,7 @@ const createStudentZodSchema = z.object({
   }),
 });
 
-const updateStudentZodSchema = z.object({
+const update = z.object({
   body: z.object({
     studentId: z.string().optional(),
     firstName: z.string().optional(),
@@ -59,6 +59,6 @@ const updateStudentZodSchema = z.object({
 });
 
 export const StudentValidation = {
-  createStudentZodSchema,
-  updateStudentZodSchema,
+  create,
+  update,
 };

@@ -6,8 +6,8 @@ import sendResponse from '../../../shared/sendResponse';
 import { facultyFilterableFields } from './faculty.constants';
 import { FacultyService } from './faculty.service';
 
-const createFaculty = catchAsync(async (req: Request, res: Response) => {
-  const result = await FacultyService.createFaculty(req.body);
+const insertIntoDB = catchAsync(async (req: Request, res: Response) => {
+  const result = await FacultyService.insertIntoDB(req.body);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -16,10 +16,10 @@ const createFaculty = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const getAllFaculties = catchAsync(async (req: Request, res: Response) => {
+const getAllFromDB = catchAsync(async (req: Request, res: Response) => {
   const filters = pick(req.query, facultyFilterableFields);
   const options = pick(req.query, ['limit', 'page', 'sortBy', 'sortOrder']);
-  const result = await FacultyService.getAllFaculties(filters, options);
+  const result = await FacultyService.getAllFromDB(filters, options);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -29,9 +29,9 @@ const getAllFaculties = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const getSingleFaculty = catchAsync(async (req: Request, res: Response) => {
+const getByIdFromDB = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
-  const result = await FacultyService.getSingleFaculty(id);
+  const result = await FacultyService.getByIdFromDB(id);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -40,10 +40,9 @@ const getSingleFaculty = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const updateFaculty = catchAsync(async (req: Request, res: Response) => {
+const updateOneInDB = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
-  const data = req.body;
-  const result = await FacultyService.updateFaculty(id, data);
+  const result = await FacultyService.updateOneInDB(id, req.body);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -51,13 +50,14 @@ const updateFaculty = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
-const deleteFaculty = catchAsync(async (req: Request, res: Response) => {
+
+const deleteByIdFromDB = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
-  const result = await FacultyService.deleteFaculty(id);
+  const result = await FacultyService.deleteByIdFromDB(id);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Faculty deleted successfully',
+    message: 'Faculty delete successfully',
     data: result,
   });
 });
@@ -89,7 +89,7 @@ const removeCourses = catchAsync(async (req: Request, res: Response) => {
 const myCourses = catchAsync(async (req: Request, res: Response) => {
   const user = (req as any).user;
   const filter = pick(req.query, ['academicSemesterId', 'courseId']);
-  const result = await FacultyService.myCourses(user.userId, filter);
+  const result = await FacultyService.myCourses(user, filter);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -97,7 +97,6 @@ const myCourses = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
-
 const getMyCourseStudents = catchAsync(async (req: Request, res: Response) => {
   const user = (req as any).user;
   const filters = pick(req.query, [
@@ -121,11 +120,11 @@ const getMyCourseStudents = catchAsync(async (req: Request, res: Response) => {
 });
 
 export const FacultyController = {
-  createFaculty,
-  getAllFaculties,
-  getSingleFaculty,
-  updateFaculty,
-  deleteFaculty,
+  insertIntoDB,
+  getAllFromDB,
+  getByIdFromDB,
+  updateOneInDB,
+  deleteByIdFromDB,
   assignCourses,
   removeCourses,
   myCourses,

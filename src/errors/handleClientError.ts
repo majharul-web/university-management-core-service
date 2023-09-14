@@ -3,13 +3,11 @@ import { IGenericErrorMessage } from '../interfaces/error';
 
 const handleClientError = (error: Prisma.PrismaClientKnownRequestError) => {
   let errors: IGenericErrorMessage[] = [];
-
   let message = '';
-
   const statusCode = 400;
 
   if (error.code === 'P2025') {
-    message = (error.meta?.cause as string) || 'Record not found';
+    message = (error.meta?.cause as string) || 'Record not found!';
     errors = [
       {
         path: '',
@@ -30,9 +28,11 @@ const handleClientError = (error: Prisma.PrismaClientKnownRequestError) => {
 
   return {
     statusCode,
-    message: message,
+    message,
     errorMessages: errors,
   };
 };
 
 export default handleClientError;
+
+//"//\nInvalid `prisma.semesterRegistration.delete()` invocation:\n\n\nAn operation failed because it depends on one or more records that were required but not found. Record to delete does not exist.",

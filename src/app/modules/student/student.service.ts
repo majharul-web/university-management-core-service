@@ -11,7 +11,7 @@ import {
 import { IStudentFilterRequest } from './student.interface';
 import { StudentUtils } from './student.utils';
 
-const createStudent = async (data: Student): Promise<Student> => {
+const insertIntoDB = async (data: Student): Promise<Student> => {
   const result = await prisma.student.create({
     data,
     include: {
@@ -23,13 +23,12 @@ const createStudent = async (data: Student): Promise<Student> => {
   return result;
 };
 
-const getAllStudents = async (
-  filterOptions: IStudentFilterRequest,
-  paginationOptions: IPaginationOptions
+const getAllFromDB = async (
+  filters: IStudentFilterRequest,
+  options: IPaginationOptions
 ): Promise<IGenericResponse<Student[]>> => {
-  const { searchTerm, ...filtersData } = filterOptions;
-  const { page, limit, skip, sortBy, sortOrder } =
-    paginationHelpers.calculatePagination(paginationOptions);
+  const { limit, page, skip } = paginationHelpers.calculatePagination(options);
+  const { searchTerm, ...filterData } = filters;
 
   const andConditions = [];
 
@@ -44,19 +43,19 @@ const getAllStudents = async (
     });
   }
 
-  if (Object.keys(filtersData).length > 0) {
+  if (Object.keys(filterData).length > 0) {
     andConditions.push({
-      AND: Object.keys(filtersData).map(key => {
+      AND: Object.keys(filterData).map(key => {
         if (studentRelationalFields.includes(key)) {
           return {
             [studentRelationalFieldsMapper[key]]: {
-              id: (filtersData as any)[key],
+              id: (filterData as any)[key],
             },
           };
         } else {
           return {
             [key]: {
-              equals: (filtersData as any)[key],
+              equals: (filterData as any)[key],
             },
           };
         }
@@ -77,10 +76,8 @@ const getAllStudents = async (
     skip,
     take: limit,
     orderBy:
-      sortBy && sortOrder
-        ? {
-            [sortBy]: sortOrder,
-          }
+      options.sortBy && options.sortOrder
+        ? { [options.sortBy]: options.sortOrder }
         : {
             createdAt: 'desc',
           },
@@ -99,7 +96,7 @@ const getAllStudents = async (
   };
 };
 
-const getSingleStudent = async (id: string): Promise<Student | null> => {
+const getByIdFromDB = async (id: string): Promise<Student | null> => {
   const result = await prisma.student.findUnique({
     where: {
       id,
@@ -113,32 +110,33 @@ const getSingleStudent = async (id: string): Promise<Student | null> => {
   return result;
 };
 
-const updateStudent = async (
+const updateIntoDB = async (
   id: string,
   payload: Partial<Student>
-): Promise<Student | null> => {
+): Promise<Student> => {
   const result = await prisma.student.update({
     where: {
       id,
     },
     data: payload,
     include: {
+      academicSemester: true,
       academicDepartment: true,
       academicFaculty: true,
-      academicSemester: true,
     },
   });
   return result;
 };
-const deleteStudent = async (id: string): Promise<Student | null> => {
+
+const deleteFromDB = async (id: string): Promise<Student> => {
   const result = await prisma.student.delete({
     where: {
       id,
     },
     include: {
+      academicSemester: true,
       academicDepartment: true,
       academicFaculty: true,
-      academicSemester: true,
     },
   });
   return result;
@@ -273,11 +271,11 @@ const getMyAcademicInfo = async (authUserId: string): Promise<any> => {
 };
 
 export const StudentService = {
-  createStudent,
-  getAllStudents,
-  getSingleStudent,
-  updateStudent,
-  deleteStudent,
+  insertIntoDB,
+  getAllFromDB,
+  getByIdFromDB,
+  updateIntoDB,
+  deleteFromDB,
   myCourses,
   getMyCourseSchedules,
   getMyAcademicInfo,

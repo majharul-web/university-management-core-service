@@ -1,7 +1,7 @@
 import { SemesterRegistrationStatus } from '@prisma/client';
-import prisma from '../../../shared/prisma';
-import ApiError from '../../../errors/ApiError';
 import httpStatus from 'http-status';
+import ApiError from '../../../errors/ApiError';
+import prisma from '../../../shared/prisma';
 import { IEnrollCoursePayload } from '../semesterRegistration/semesterRegistration.interface';
 
 const enrollIntoCourse = async (

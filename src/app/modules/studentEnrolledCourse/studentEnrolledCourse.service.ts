@@ -24,18 +24,17 @@ const insertIntoDB = async (
     await prisma.studentEnrolledCourse.findFirst({
       where: {
         OR: [
+          // Check if the 'status' property of the record is equal to 'ONGOING'.
           {
             status: StudentEnrolledCourseStatus.ONGOING,
           },
-
+          // Check if the 'status' property of the record is equal to 'COMPLETED'.
           {
             status: StudentEnrolledCourseStatus.COMPLETED,
           },
         ],
       },
     });
-
-  console.log('', isCourseOngoingOrCompleted);
 
   // If there is a course that is ongoing or completed, throw an error with a specific message.
   if (isCourseOngoingOrCompleted) {
@@ -45,6 +44,8 @@ const insertIntoDB = async (
     );
   }
 
+  // Use Prisma to create a new record in the 'studentEnrolledCourse' table with the provided 'data'.
+  // Include related data from the 'academicSemester', 'student', and 'course' tables in the result.
   const result = await prisma.studentEnrolledCourse.create({
     data,
     include: {

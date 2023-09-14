@@ -31,4 +31,4 @@ router.delete(
   StudentEnrolledCourseController.deleteByIdFromDB
 );
 
-export const StudentEnrolledCourseRoutes = router;
+export const studentEnrolledCourseRoutes = router;

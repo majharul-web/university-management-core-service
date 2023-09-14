@@ -1,32 +1,33 @@
 import express from 'express';
+import { ENUM_USER_ROLE } from '../../../enums/user';
+import auth from '../../middlewares/auth';
 import validateRequest from '../../middlewares/validateRequest';
 import { BuildingController } from './building.controller';
-import { BuildingValidation } from './building.validations';
-import auth from '../../middlewares/auth';
-import { ENUM_USER_ROLE } from '../../../enums/user';
+import { BuildingValidations } from './building.validations';
 
 const router = express.Router();
 
-router.patch(
-  '/:id',
-  auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
-  validateRequest(BuildingValidation.updateBuildingZodSchema),
-  BuildingController.updateBuilding
-);
-router.delete(
-  '/:id',
-  auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
-  BuildingController.deleteBuilding
-);
-router.get('/', BuildingController.getAllBuildings);
-
-router.get('/:id', BuildingController.getSingleBuilding);
+router.get('/', BuildingController.getAllFromDB);
+router.get('/:id', BuildingController.getByIdFromDB);
 
 router.post(
-  '/create-building',
-  auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
-  validateRequest(BuildingValidation.createBuildingZodSchema),
-  BuildingController.createBuilding
+  '/',
+  auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
+  validateRequest(BuildingValidations.create),
+  BuildingController.insertIntoDB
 );
 
-export const BuildingRoutes = router;
+router.patch(
+  '/:id',
+  validateRequest(BuildingValidations.update),
+  auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
+  BuildingController.updateOneInDB
+);
+
+router.delete(
+  '/:id',
+  auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
+  BuildingController.deleteByIdFromDB
+);
+
+export const buildingRoutes = router;

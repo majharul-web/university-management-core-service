@@ -8,7 +8,7 @@ import {
   offeredCourseClassScheduleRelationalFieldsMapper,
   offeredCourseClassScheduleSearchableFields,
 } from './offeredCourseClassSchedule.constants';
-import { IOfferedCourseClassScheduleFilterRequest } from './offeredCourseClassSchedule.interface';
+import { IOfferedCourseClassScheduleFilterRequiest } from './offeredCourseClassSchedule.interface';
 import { OfferedCourseClassScheduleUtils } from './offeredCourseClassSchedule.utils';
 
 const insertIntoDB = async (
@@ -34,7 +34,7 @@ const insertIntoDB = async (
 };
 
 const getAllFromDB = async (
-  filters: IOfferedCourseClassScheduleFilterRequest,
+  filters: IOfferedCourseClassScheduleFilterRequiest,
   options: IPaginationOptions
 ): Promise<IGenericResponse<OfferedCourseClassSchedule[]>> => {
   const { limit, page, skip } = paginationHelpers.calculatePagination(options);

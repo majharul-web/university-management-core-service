@@ -6,32 +6,33 @@ import sendResponse from '../../../shared/sendResponse';
 import { buildingFilterableFields } from './building.constants';
 import { BuildingService } from './building.service';
 
-const createBuilding = catchAsync(async (req: Request, res: Response) => {
-  const result = await BuildingService.createBuilding(req.body);
+const insertIntoDB = catchAsync(async (req: Request, res: Response) => {
+  const result = await BuildingService.insertIntoDB(req.body);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Building created successfully',
+    message: 'Building created successfully!',
     data: result,
   });
 });
 
-const getAllBuildings = catchAsync(async (req: Request, res: Response) => {
+const getAllFromDB = catchAsync(async (req: Request, res: Response) => {
+  console.log(req.query);
   const filters = pick(req.query, buildingFilterableFields);
   const options = pick(req.query, ['limit', 'page', 'sortBy', 'sortOrder']);
-  const result = await BuildingService.getAllBuildings(filters, options);
+  const result = await BuildingService.getAllFromDB(filters, options);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Buildings fetched successfully',
+    message: 'Building fetched successfully!',
     meta: result.meta,
     data: result.data,
   });
 });
 
-const getSingleBuilding = catchAsync(async (req: Request, res: Response) => {
+const getByIdFromDB = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
-  const result = await BuildingService.getSingleBuilding(id);
+  const result = await BuildingService.getByIdFromDB(id);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -40,10 +41,9 @@ const getSingleBuilding = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const updateBuilding = catchAsync(async (req: Request, res: Response) => {
+const updateOneInDB = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
-  const data = req.body;
-  const result = await BuildingService.updateBuilding(id, data);
+  const result = await BuildingService.updateOneInDB(id, req.body);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -51,21 +51,22 @@ const updateBuilding = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
-const deleteBuilding = catchAsync(async (req: Request, res: Response) => {
+
+const deleteByIdFromDB = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
-  const result = await BuildingService.deleteBuilding(id);
+  const result = await BuildingService.deleteByIdFromDB(id);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Building deleted successfully',
+    message: 'Building delete successfully',
     data: result,
   });
 });
 
 export const BuildingController = {
-  createBuilding,
-  getAllBuildings,
-  getSingleBuilding,
-  updateBuilding,
-  deleteBuilding,
+  insertIntoDB,
+  getAllFromDB,
+  getByIdFromDB,
+  updateOneInDB,
+  deleteByIdFromDB,
 };

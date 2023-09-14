@@ -22,7 +22,7 @@ const update = z.object({
     status: z.string().optional(),
     grade: z.string().optional(),
     point: z.number().optional(),
-    totalMarks: z.number().optional(),
+    marks: z.number().optional(),
   }),
 });
 

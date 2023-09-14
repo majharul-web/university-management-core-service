@@ -2,22 +2,23 @@ import express from 'express';
 import { ENUM_USER_ROLE } from '../../../enums/user';
 import auth from '../../middlewares/auth';
 import validateRequest from '../../middlewares/validateRequest';
-import { SemesterRegistrationController } from './semesterRegistration.cotroller';
-import { SemesterRegistrationValidation } from './semesterRegistration.validation';
+import { SemesterRegistrationController } from './semesterRegistration.controller';
+import { SemesterRegistrationValidation } from './semesterRegistration.validations';
 
 const router = express.Router();
-
 router.get(
   '/get-my-registration',
   auth(ENUM_USER_ROLE.STUDENT),
   SemesterRegistrationController.getMyRegistration
 );
 
+router.get('/', SemesterRegistrationController.getAllFromDB);
 router.get(
   '/get-my-semsester-courses',
   auth(ENUM_USER_ROLE.STUDENT),
-  SemesterRegistrationController.getMySemesterRegCourses
+  SemesterRegistrationController.getMySemesterRegCouses
 );
+router.get('/:id', SemesterRegistrationController.getByIdFromDB);
 
 router.post(
   '/start-registration',
@@ -25,30 +26,24 @@ router.post(
   SemesterRegistrationController.startMyRegistration
 );
 
-router.get('/', SemesterRegistrationController.getAllSemesterRegistration);
-router.get(
-  '/:id',
-  SemesterRegistrationController.getSingleSemesterRegistration
-);
-
 router.post(
   '/',
-  validateRequest(SemesterRegistrationValidation.createSemesterRegistration),
+  validateRequest(SemesterRegistrationValidation.create),
   auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
-  SemesterRegistrationController.createSemesterRegistration
+  SemesterRegistrationController.insertIntoDB
 );
 
 router.patch(
   '/:id',
-  validateRequest(SemesterRegistrationValidation.updateSemesterRegistration),
+  validateRequest(SemesterRegistrationValidation.update),
   auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
-  SemesterRegistrationController.updateSemesterRegistration
+  SemesterRegistrationController.updateOneInDB
 );
 
 router.delete(
   '/:id',
   auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
-  SemesterRegistrationController.deleteSemesterRegistration
+  SemesterRegistrationController.deleteByIdFromDB
 );
 
 router.post(
@@ -76,4 +71,4 @@ router.post(
   SemesterRegistrationController.startNewSemester
 );
 
-export const SemesterRegistrationRoutes = router;
+export const semesterRegistrationRoutes = router;

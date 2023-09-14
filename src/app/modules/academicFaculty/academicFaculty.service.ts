@@ -1,28 +1,30 @@
-import { IPaginationOptions } from '../../../interfaces/pagination';
-import { IAcademicFacultyFilterRequest } from './academicFaculty.interface';
 import { AcademicFaculty, Prisma } from '@prisma/client';
-import { academicFacultySearchableFields } from './academicFaculty.constant';
-import { IGenericResponse } from '../../../interfaces/common';
-import prisma from '../../../shared/prisma';
 import { paginationHelpers } from '../../../helpers/paginationHelper';
+import { IGenericResponse } from '../../../interfaces/common';
+import { IPaginationOptions } from '../../../interfaces/pagination';
+import prisma from '../../../shared/prisma';
+import { academicFacultySearchableFields } from './academicFaculty.constants';
+import { IAcademicFacultyFilterRequest } from './academicFaculty.interface';
 
-const createAcademicFaculty = async (
-  payload: AcademicFaculty
-): Promise<AcademicFaculty | null> => {
-  const result = await prisma.academicFaculty.create({ data: payload });
+const insertIntoDB = async (
+  data: AcademicFaculty
+): Promise<AcademicFaculty> => {
+  const result = await prisma.academicFaculty.create({
+    data,
+  });
+
   return result;
 };
 
-const getAllAcademicFaculties = async (
-  filterOptions: IAcademicFacultyFilterRequest,
-  paginationOptions: IPaginationOptions
-): Promise<IGenericResponse<AcademicFaculty[] | null>> => {
-  const { searchTerm, ...filterData } = filterOptions;
-
-  const { page, limit, skip, sortBy, sortOrder } =
-    paginationHelpers.calculatePagination(paginationOptions);
+const getAllFromDB = async (
+  filters: IAcademicFacultyFilterRequest,
+  options: IPaginationOptions
+): Promise<IGenericResponse<AcademicFaculty[]>> => {
+  const { limit, page, skip } = paginationHelpers.calculatePagination(options);
+  const { searchTerm, ...filterData } = filters;
 
   const andConditions = [];
+
   if (searchTerm) {
     andConditions.push({
       OR: academicFacultySearchableFields.map(field => ({
@@ -44,27 +46,24 @@ const getAllAcademicFaculties = async (
     });
   }
 
-  const whereConditions: Prisma.AcademicFacultyWhereInput = andConditions.length
-    ? { AND: andConditions }
-    : {};
+  const whereConditions: Prisma.AcademicFacultyWhereInput =
+    andConditions.length > 0 ? { AND: andConditions } : {};
 
   const result = await prisma.academicFaculty.findMany({
     where: whereConditions,
-    skip: skip,
+    skip,
     take: limit,
     orderBy:
-      sortBy && sortOrder
-        ? {
-            [sortBy]: sortOrder,
-          }
+      options.sortBy && options.sortOrder
+        ? { [options.sortBy]: options.sortOrder }
         : {
             createdAt: 'desc',
           },
   });
-
   const total = await prisma.academicFaculty.count({
     where: whereConditions,
   });
+
   return {
     meta: {
       total,
@@ -75,9 +74,7 @@ const getAllAcademicFaculties = async (
   };
 };
 
-const getSingleAcademicFaculty = async (
-  id: string
-): Promise<AcademicFaculty | null> => {
+const getByIdFromDB = async (id: string): Promise<AcademicFaculty | null> => {
   const result = await prisma.academicFaculty.findUnique({
     where: {
       id,
@@ -86,10 +83,10 @@ const getSingleAcademicFaculty = async (
   return result;
 };
 
-const updateAcademicFaculty = async (
+const updateOneInDB = async (
   id: string,
   payload: Partial<AcademicFaculty>
-): Promise<AcademicFaculty | null> => {
+): Promise<AcademicFaculty> => {
   const result = await prisma.academicFaculty.update({
     where: {
       id,
@@ -98,9 +95,8 @@ const updateAcademicFaculty = async (
   });
   return result;
 };
-const deleteAcademicFaculty = async (
-  id: string
-): Promise<AcademicFaculty | null> => {
+
+const deleteByIdFromDB = async (id: string): Promise<AcademicFaculty> => {
   const result = await prisma.academicFaculty.delete({
     where: {
       id,
@@ -110,9 +106,9 @@ const deleteAcademicFaculty = async (
 };
 
 export const AcademicFacultyService = {
-  createAcademicFaculty,
-  getAllAcademicFaculties,
-  getSingleAcademicFaculty,
-  updateAcademicFaculty,
-  deleteAcademicFaculty,
+  insertIntoDB,
+  getAllFromDB,
+  getByIdFromDB,
+  updateOneInDB,
+  deleteByIdFromDB,
 };

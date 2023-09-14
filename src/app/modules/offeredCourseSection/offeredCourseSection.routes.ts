@@ -1,39 +1,33 @@
 import express from 'express';
-import validateRequest from '../../middlewares/validateRequest';
-import auth from '../../middlewares/auth';
 import { ENUM_USER_ROLE } from '../../../enums/user';
+import auth from '../../middlewares/auth';
+import validateRequest from '../../middlewares/validateRequest';
 import { OfferedCourseSectionController } from './offeredCourseSection.controller';
-import { OfferedCourseSectionValidation } from './offeredCourseSection.validations';
+import { OfferedCourseSectionValidation } from './offeredCourseSection.validation';
 
 const router = express.Router();
 
-router.patch(
-  '/:id',
-  auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
-  validateRequest(
-    OfferedCourseSectionValidation.updateOfferedCourseSectionZodSchema
-  ),
-  OfferedCourseSectionController.updateOfferedCourseSection
-);
-router.delete(
-  '/:id',
-  auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
-  OfferedCourseSectionController.deleteOfferedCourseSection
-);
-router.get('/', OfferedCourseSectionController.getAllOfferedCourseSection);
-
-router.get(
-  '/:id',
-  OfferedCourseSectionController.getSingleOfferedCourseSection
-);
+router.get('/', OfferedCourseSectionController.getAllFromDB);
+router.get('/:id', OfferedCourseSectionController.getByIdFromDB);
 
 router.post(
-  '/create-section',
-  // auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
-  validateRequest(
-    OfferedCourseSectionValidation.createOfferedCourseSectionZodSchema
-  ),
-  OfferedCourseSectionController.createOfferedCourseSection
+  '/',
+  validateRequest(OfferedCourseSectionValidation.create),
+  auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
+  OfferedCourseSectionController.insertIntoDB
 );
 
-export const OfferedCourseSectionRoutes = router;
+router.patch(
+  '/:id',
+  validateRequest(OfferedCourseSectionValidation.update),
+  auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
+  OfferedCourseSectionController.updateOneInDB
+);
+
+router.delete(
+  '/:id',
+  auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
+  OfferedCourseSectionController.deleteByIdFromDB
+);
+
+export const offeredCourseSectionRoutes = router;

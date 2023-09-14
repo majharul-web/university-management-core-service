@@ -11,4 +11,4 @@ router.get(
   StudentSemesterPaymentController.getAllFromDB
 );
 
-export const StudentSemesterPaymentRoutes = router;
+export const studentSemesterPaymentRoutes = router;

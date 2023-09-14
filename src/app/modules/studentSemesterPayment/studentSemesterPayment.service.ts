@@ -3,16 +3,16 @@ import {
   DefaultArgs,
   PrismaClientOptions,
 } from '@prisma/client/runtime/library';
-import { IStudentSemesterPaymentFilterRequest } from './studentSemesterPayment.interface';
-import { IPaginationOptions } from '../../../interfaces/pagination';
-import { IGenericResponse } from '../../../interfaces/common';
 import { paginationHelpers } from '../../../helpers/paginationHelper';
+import { IGenericResponse } from '../../../interfaces/common';
+import { IPaginationOptions } from '../../../interfaces/pagination';
+import prisma from '../../../shared/prisma';
 import {
   studentSemesterPaymentRelationalFields,
   studentSemesterPaymentRelationalFieldsMapper,
   studentSemesterPaymentSearchableFields,
 } from './studentSemesterPayment.constants';
-import prisma from '../../../shared/prisma';
+import { IStudentSemesterPaymentFilterRequest } from './studentSemesterPayment.interface';
 
 const createSemesterPayment = async (
   prismaClient: Omit<

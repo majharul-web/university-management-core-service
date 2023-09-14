@@ -1,31 +1,20 @@
-import { IPaginationOptions } from '../../../interfaces/pagination';
-import { IAcademicDepartmentFilterRequest } from './academicDepartment.interface';
 import { AcademicDepartment, Prisma } from '@prisma/client';
+import { paginationHelpers } from '../../../helpers/paginationHelper';
+import { IGenericResponse } from '../../../interfaces/common';
+import { IPaginationOptions } from '../../../interfaces/pagination';
+import prisma from '../../../shared/prisma';
 import {
   academicDepartmentRelationalFields,
   academicDepartmentRelationalFieldsMapper,
   academicDepartmentSearchableFields,
-} from './academicDepartment.constant';
-import { IGenericResponse } from '../../../interfaces/common';
-import prisma from '../../../shared/prisma';
-import { paginationHelpers } from '../../../helpers/paginationHelper';
+} from './academicDepartment.contants';
+import { IAcademicDepartmentFilterRequest } from './academicDepartment.interface';
 
-const createAcademicDepartment = async (
-  payload: AcademicDepartment
-): Promise<AcademicDepartment | null> => {
-  // const result = await prisma.academicDepartment.create({
-  //   data: {
-  //     title: payload.title,
-  //     academicFaculty: {
-  //       connect: {
-  //         id: payload.academicFacultyId,
-  //       },
-  //     },
-  //   },
-  // });
-
+const insertIntoDB = async (
+  data: AcademicDepartment
+): Promise<AcademicDepartment> => {
   const result = await prisma.academicDepartment.create({
-    data: payload,
+    data,
     include: {
       academicFaculty: true,
     },
@@ -34,16 +23,15 @@ const createAcademicDepartment = async (
   return result;
 };
 
-const getAllAcademicDepartments = async (
-  filterOptions: IAcademicDepartmentFilterRequest,
-  paginationOptions: IPaginationOptions
-): Promise<IGenericResponse<AcademicDepartment[] | null>> => {
-  const { searchTerm, ...filterData } = filterOptions;
-
-  const { page, limit, skip, sortBy, sortOrder } =
-    paginationHelpers.calculatePagination(paginationOptions);
+const getAllFromDB = async (
+  filters: IAcademicDepartmentFilterRequest,
+  options: IPaginationOptions
+): Promise<IGenericResponse<AcademicDepartment[]>> => {
+  const { limit, page, skip } = paginationHelpers.calculatePagination(options);
+  const { searchTerm, ...filterData } = filters;
 
   const andConditions = [];
+
   if (searchTerm) {
     andConditions.push({
       OR: academicDepartmentSearchableFields.map(field => ({
@@ -76,29 +64,26 @@ const getAllAcademicDepartments = async (
   }
 
   const whereConditions: Prisma.AcademicDepartmentWhereInput =
-    andConditions.length ? { AND: andConditions } : {};
+    andConditions.length > 0 ? { AND: andConditions } : {};
 
   const result = await prisma.academicDepartment.findMany({
-    where: whereConditions,
-    skip: skip,
-    take: limit,
     include: {
       academicFaculty: true,
     },
-
+    where: whereConditions,
+    skip,
+    take: limit,
     orderBy:
-      sortBy && sortOrder
-        ? {
-            [sortBy]: sortOrder,
-          }
+      options.sortBy && options.sortOrder
+        ? { [options.sortBy]: options.sortOrder }
         : {
             createdAt: 'desc',
           },
   });
-
   const total = await prisma.academicDepartment.count({
     where: whereConditions,
   });
+
   return {
     meta: {
       total,
@@ -109,7 +94,7 @@ const getAllAcademicDepartments = async (
   };
 };
 
-const getSingleAcademicDepartment = async (
+const getByIdFromDB = async (
   id: string
 ): Promise<AcademicDepartment | null> => {
   const result = await prisma.academicDepartment.findUnique({
@@ -123,10 +108,10 @@ const getSingleAcademicDepartment = async (
   return result;
 };
 
-const updateAcademicDepartment = async (
+const updateOneInDB = async (
   id: string,
   payload: Partial<AcademicDepartment>
-): Promise<AcademicDepartment | null> => {
+): Promise<AcademicDepartment> => {
   const result = await prisma.academicDepartment.update({
     where: {
       id,
@@ -138,9 +123,8 @@ const updateAcademicDepartment = async (
   });
   return result;
 };
-const deleteAcademicDepartment = async (
-  id: string
-): Promise<AcademicDepartment | null> => {
+
+const deleteByIdFromDB = async (id: string): Promise<AcademicDepartment> => {
   const result = await prisma.academicDepartment.delete({
     where: {
       id,
@@ -153,9 +137,9 @@ const deleteAcademicDepartment = async (
 };
 
 export const AcademicDepartmentService = {
-  createAcademicDepartment,
-  getAllAcademicDepartments,
-  getSingleAcademicDepartment,
-  updateAcademicDepartment,
-  deleteAcademicDepartment,
+  insertIntoDB,
+  getAllFromDB,
+  getByIdFromDB,
+  updateOneInDB,
+  deleteByIdFromDB,
 };

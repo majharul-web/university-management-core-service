@@ -6,8 +6,8 @@ import sendResponse from '../../../shared/sendResponse';
 import { roomFilterableFields } from './room.constants';
 import { RoomService } from './room.service';
 
-const createRoom = catchAsync(async (req: Request, res: Response) => {
-  const result = await RoomService.createRoom(req.body);
+const insertIntoDB = catchAsync(async (req: Request, res: Response) => {
+  const result = await RoomService.insertIntoDB(req.body);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -16,22 +16,22 @@ const createRoom = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const getAllRooms = catchAsync(async (req: Request, res: Response) => {
+const getAllFromDB = catchAsync(async (req: Request, res: Response) => {
   const filters = pick(req.query, roomFilterableFields);
   const options = pick(req.query, ['limit', 'page', 'sortBy', 'sortOrder']);
-  const result = await RoomService.getAllRooms(filters, options);
+  const result = await RoomService.getAllFromDB(filters, options);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Faculties fetched successfully',
+    message: 'Rooms fetched successfully',
     meta: result.meta,
     data: result.data,
   });
 });
 
-const getSingleRoom = catchAsync(async (req: Request, res: Response) => {
+const getByIdFromDB = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
-  const result = await RoomService.getSingleRoom(id);
+  const result = await RoomService.getByIdFromDB(id);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -40,10 +40,9 @@ const getSingleRoom = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const updateRoom = catchAsync(async (req: Request, res: Response) => {
+const updateOneInDB = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
-  const data = req.body;
-  const result = await RoomService.updateRoom(id, data);
+  const result = await RoomService.updateOneInDB(id, req.body);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -51,9 +50,10 @@ const updateRoom = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
-const deleteRoom = catchAsync(async (req: Request, res: Response) => {
+
+const deleteByIdFromDB = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
-  const result = await RoomService.deleteRoom(id);
+  const result = await RoomService.deleteByIdFromDB(id);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -63,9 +63,9 @@ const deleteRoom = catchAsync(async (req: Request, res: Response) => {
 });
 
 export const RoomController = {
-  createRoom,
-  getAllRooms,
-  getSingleRoom,
-  updateRoom,
-  deleteRoom,
+  insertIntoDB,
+  getAllFromDB,
+  getByIdFromDB,
+  updateOneInDB,
+  deleteByIdFromDB,
 };
